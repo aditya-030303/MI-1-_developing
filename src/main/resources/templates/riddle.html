@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <!-- th:replace="~{layout :: layout(~{::title}, ~{::style}, ~{::script}, ~{::div.content})}"> -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riddle Challenge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Satisfy&display=swap"
+      rel="stylesheet"
+    />
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+    <style>
+      :root {
+        --primary-color: #6366f1;
+        --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+        --light-bg: #f3f4f6;
+        --dark-bg: #111827;
+        --light-text: #f9fafb;
+        --dark-text: #1f2937;
+        --light-card: rgba(255, 255, 255, 0.7);
+        --dark-card: rgba(30, 41, 59, 0.7);
+        --light-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+        --dark-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        --border-radius: 1rem;
+        --transition: all 0.4s ease;
+        --error-color: #ef4444;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        transition: var(--transition);
+        overflow-x: hidden;
+        padding: 20px;
+        padding-top: 70px; /* Make room for fixed header */
+        color: var(--dark-text);
+        background-color: var(--light-bg);
+        background-image: radial-gradient(
+            circle at 100% 0%,
+            rgba(99, 102, 241, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 0% 100%,
+            rgba(139, 92, 246, 0.15) 0%,
+            transparent 50%
+          );
+      }
+
+      body.dark-mode {
+        color: var(--light-text);
+        background-color: var(--dark-bg);
+        background-image: radial-gradient(
+            circle at 100% 0%,
+            rgba(99, 102, 241, 0.15) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 0% 100%,
+            rgba(139, 92, 246, 0.15) 0%,
+            transparent 50%
+          );
+      }
+
+      /* Theme Toggle Button */
+      .theme-toggle {
+        position: relative;
+       
+        right: 20px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        /* width: 50px;
+        height: 25px; */
+        border-radius: 50px;
+        background-color: var(--dark-text);
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        padding: 2px;
+      }
+
+      .theme-toggle-circle {
+        width: 21px;
+        height: 21px;
+        border-radius: 50%;
+        background-color: var(--light-bg);
+        transition: var(--transition);
+      }
+
+      body.dark-mode .theme-toggle {
+        background-color: var(--light-text);
+      }
+
+      body.dark-mode .theme-toggle-circle {
+        transform: translateX(25px);
+        background-color: var(--dark-bg);
+      }
+
+      /* Main Card */
+      .card {
+        width: 100%;
+        max-width: 500px;
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border-radius: var(--border-radius);
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background-color: var(--light-card);
+        box-shadow: var(--light-shadow);
+        transform: translateY(30px);
+        opacity: 0;
+      }
+
+      body.dark-mode .card {
+        background-color: var(--dark-card);
+        box-shadow: var(--dark-shadow);
+      }
+
+      .riddle-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+        z-index: 10;
+        position: relative;
+      }
+
+      .card-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: var(--primary-gradient);
+        opacity: 0.05;
+        transition: var(--transition);
+      }
+
+      .dark-mode .card-overlay {
+        opacity: 0.1;
+      }
+
+      h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        background: var(--primary-gradient);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: yellowgreen;
+        font-family: "Satisfy", cursive;
+        font-size: 2.5rem;
+      }
+
+      .riddle-text {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        line-height: 1.8;
+        position: relative;
+        transition: all 0.3s ease-in-out;
+        height: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        /* ✨ Gradient Text Effect */
+        background: linear-gradient(90deg, #ff8a00, #e52e71);
+
+        /* ✅ Vendor Prefix for cross-browser support */
+        -webkit-background-clip: text; /* Safari, Chrome */
+        -moz-background-clip: text; /* Firefox (legacy) */
+        background-clip: text; /* Standard */
+
+        /* ✅ Ensuring text remains visible */
+        -webkit-text-fill-color: transparent; /* Chrome, Safari */
+        -moz-text-fill-color: transparent; /* Firefox */
+        -text-fill-color: transparent; /* Standard */
+      }
+
+      /* Input and Button */
+      form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      .input-wrapper {
+        position: relative;
+        width: 100%;
+      }
+
+      input {
+        width: 100%;
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        border: 2px solid transparent;
+        background-color: rgba(255, 255, 255, 0.5);
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05),
+          -5px -5px 10px rgba(255, 255, 255, 0.6);
+        font-family: inherit;
+        font-size: 1rem;
+        transition: var(--transition);
+        color: var(--dark-text);
+      }
+
+      .dark-mode input {
+        background-color: rgba(30, 41, 59, 0.8);
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
+          -5px -5px 10px rgba(255, 255, 255, 0.05);
+        color: var(--light-text);
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+      }
+
+      input::placeholder {
+        color: rgba(31, 41, 55, 0.6);
+        transition: var(--transition);
+      }
+
+      .dark-mode input::placeholder {
+        color: rgba(249, 250, 251, 0.6);
+      }
+
+      button {
+        padding: 1rem 1.5rem;
+        border-radius: 0.75rem;
+        border: none;
+        background-image: var(--primary-gradient);
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+        overflow: hidden;
+        /* box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1),
+          -5px -5px 10px rgba(255, 255, 255, 0.5); */
+      }
+
+      .dark-mode button {
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
+          -5px -5px 10px rgba(255, 255, 255, 0.05);
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      button::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: 0.5s;
+      }
+
+      button:hover::before {
+        left: 100%;
+      }
+
+      /* Error Message */
+      .error-message {
+        color: var(--error-color);
+        text-align: center;
+        font-size: 0.9rem;
+        min-height: 1.2rem;
+        margin-top: 0.5rem;
+        transition: var(--transition);
+        opacity: 1;
+      }
+
+      /* Floating particles */
+      .particles-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+      }
+
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: var(--primary-gradient);
+        opacity: 0.3;
+        animation: float 15s infinite linear;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+        100% {
+          transform: translateY(-100vh) rotate(360deg);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .card {
+          padding: 2rem;
+        }
+
+        h2 {
+          font-size: 2rem;
+        }
+
+        .riddle-text {
+          font-size: 1rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .card {
+          padding: 1.5rem;
+        }
+
+        h2 {
+          font-size: 1.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+     <!-- Include header styles -->
+     <th:block th:replace="~{fragments/header :: header-styles}"></th:block>
+    </head>
+    <body>
+        <!-- Include header fragment -->
+        <div th:replace="~{fragments/header :: mainHeader}"></div>
+   
+    <!-- Floating Particles Background -->
+    <div class="particles-container" id="particles-container"></div>
+
+    <div class="card">
+      <div class="card-overlay"></div>
+      <div class="riddle-container">
+        <h2>Riddle Challenge</h2>
+        <div class="riddle-text" id="riddle-text"></div>
+
+        <form action="/riddles/check-riddle" method="post" id="riddle-form">
+          <div class="input-wrapper">
+            <input
+              type="text"
+              name="answer"
+              id="answer"
+              placeholder="Your Answer"
+              required
+              autocomplete="off"
+            />
+            <input type="hidden" name="riddleId" id="riddleId" />
+          </div>
+          <button type="submit">Submit Answer</button>
+        </form>
+
+        <div
+          class="error-message"
+          id="error-message"
+          th:if="${error}"
+          th:text="${error}"
+        ></div>
+      </div>
+    </div>
+
+    <script>
+      // Create floating particles
+      function createParticles() {
+        const container = document.getElementById("particles-container");
+        const particleCount = 20;
+
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement("div");
+          particle.classList.add("particle");
+
+          // Random size between 10px and 40px
+          const size = Math.random() * 30 + 10;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+
+          // Random position
+          particle.style.left = `${Math.random() * 100}vw`;
+          particle.style.top = `${Math.random() * 100}vh`;
+
+          // Random animation duration between 15s and 30s
+          const duration = Math.random() * 15 + 15;
+          particle.style.animationDuration = `${duration}s`;
+
+          // Random delay
+          const delay = Math.random() * 10;
+          particle.style.animationDelay = `${delay}s`;
+
+          container.appendChild(particle);
+        }
+      }
+
+      // Theme toggle functionality
+      function setupThemeToggle() {
+        const themeToggle = document.querySelector(".theme-toggle");
+        const prefersDarkMode = window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+
+        // Set initial theme based on system preference
+        if (prefersDarkMode) {
+          document.body.classList.add("dark-mode");
+        }
+
+        themeToggle.addEventListener("click", () => {
+          document.body.classList.toggle("dark-mode");
+        });
+      }
+
+      // Typing effect for riddle
+      async function setupTypingEffect() {
+        try {
+          const response = await fetch("/riddles/random"); // Fetch riddle from backend
+          const data = await response.json();
+          const riddleText = data.question; // Use the 'question' field from the response
+          const riddleId = data.id; // Use the 'id' field from the response
+
+          // Set the riddle ID in the hidden input field
+          document.getElementById("riddleId").value = riddleId;
+
+          new Typed("#riddle-text", {
+            strings: [riddleText],
+            typeSpeed: 40,
+            showCursor: true,
+            cursorChar: "|",
+            loop: false,
+          });
+        } catch (error) {
+          console.error("Error fetching riddle:", error);
+          document.getElementById("riddle-text").textContent =
+            "Failed to load riddle.";
+        }
+      }
+
+      // Form submission animation
+      function setupFormAnimation() {
+        const form = document.getElementById("riddle-form");
+        const errorMessage = document.getElementById("error-message");
+
+        // Add animation to the form submission
+        form.addEventListener("submit", function (e) {
+          // Don't prevent default - let the form submit normally
+
+          // Add a nice button animation when submitting
+          const button = this.querySelector("button");
+          gsap.to(button, {
+            scale: 0.95,
+            duration: 0.1,
+            onComplete: () => {
+              gsap.to(button, {
+                scale: 1,
+                duration: 0.1,
+              });
+            },
+          });
+        });
+
+        // If there's an error message (from server), animate it
+        if (errorMessage && errorMessage.textContent) {
+          gsap.from(errorMessage, {
+            y: -10,
+            opacity: 0,
+            duration: 0.3,
+          });
+
+          gsap.to(form, {
+            x: [-5, 5, -5, 5, 0],
+            duration: 0.4,
+          });
+        }
+      }
+
+      // Initial animations
+      function setupInitialAnimations() {
+        gsap.to(".card", {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          ease: "back.out(1.7)",
+        });
+      }
+
+      // Input field animations
+      function setupInputAnimations() {
+        const input = document.getElementById("answer");
+
+        input.addEventListener("focus", () => {
+          gsap.to(input, {
+            scale: 1.02,
+            duration: 0.3,
+          });
+        });
+
+        input.addEventListener("blur", () => {
+          gsap.to(input, {
+            scale: 1,
+            duration: 0.3,
+          });
+        });
+      }
+
+      // Initialize everything when the DOM is loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        createParticles();
+        setupThemeToggle();
+        setupTypingEffect();
+        setupFormAnimation();
+        setupInitialAnimations();
+        setupInputAnimations();
+      });
+    </script>
+  </body>
+</html>

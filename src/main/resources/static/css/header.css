@@ -1,0 +1,256 @@
+/* Header Styles */
+:root {
+    --primary-color: #6366f1;
+    --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+    --light-bg: #f3f4f6;
+    --dark-bg: #111827;
+    --light-text: #f9fafb;
+    --dark-text: #1f2937;
+    --light-header: rgba(255, 255, 255, 0.8);
+    --dark-header: rgba(17, 24, 39, 0.9);
+    --border-radius: 1rem;
+    --transition: all 0.4s ease;
+}
+
+/* Header Container */
+.site-header * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Header Container */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Light/Dark Mode Header Styles */
+body:not(.dark-mode) .site-header {
+    background-color: var(--light-header);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    color: var(--dark-text);
+}
+
+body.dark-mode .site-header {
+    background-color: var(--dark-header);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    color: var(--light-text);
+}
+
+/* Logo */
+.logo {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.logo-text {
+    font-family: 'Satisfy', cursive;
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--primary-gradient);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+/* Navigation */
+.main-nav {
+    display: flex;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    transition: var(--transition);
+}
+
+body:not(.dark-mode) .nav-links a {
+    color: var(--dark-text);
+}
+
+body.dark-mode .nav-links a {
+    color: var(--light-text);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-gradient);
+    transition: var(--transition);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Header Actions (Login/Register buttons) */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.register-btn, .login-btn {
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.register-btn {
+    background-image: var(--primary-gradient);
+    color: white;
+}
+
+.login-btn {
+    border: 2px solid;
+    border-image: var(--primary-gradient) 1;
+}
+
+body:not(.dark-mode) .login-btn {
+    color: var(--dark-text);
+}
+
+body.dark-mode .login-btn {
+    color: var(--light-text);
+}
+
+.register-btn:hover, .login-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Theme Toggle in Header */
+.theme-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 22px;
+    border-radius: 50px;
+    background-color: var(--dark-text);
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    padding: 2px;
+}
+
+.theme-toggle-circle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--light-bg);
+    transition: var(--transition);
+}
+
+body.dark-mode .theme-toggle {
+    background-color: var(--light-text);
+}
+
+body.dark-mode .theme-toggle-circle {
+    transform: translateX(18px);
+    background-color: var(--dark-bg);
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+}
+
+.mobile-menu-toggle span {
+    width: 100%;
+    height: 2px;
+    background-color: currentColor;
+    transition: var(--transition);
+}
+
+/* Responsive Header */
+@media (max-width: 768px) {
+    .nav-links, .header-actions .register-btn, .header-actions .login-btn {
+        display: none;
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    /* Mobile menu active state - you'll need JavaScript to toggle a class */
+    .site-header.mobile-menu-active .nav-links {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background-color: var(--light-header);
+        padding: 1rem 2rem;
+        gap: 1rem;
+    }
+
+    body.dark-mode .site-header.mobile-menu-active .nav-links {
+        background-color: var(--dark-header);
+    }
+
+    .site-header.mobile-menu-active .header-actions {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: calc(100% + 150px);
+        left: 0;
+        right: 0;
+        background-color: var(--light-header);
+        padding: 1rem 2rem;
+    }
+
+    body.dark-mode .site-header.mobile-menu-active .header-actions {
+        background-color: var(--dark-header);
+    }
+
+    .site-header.mobile-menu-active .header-actions .register-btn,
+    .site-header.mobile-menu-active .header-actions .login-btn {
+        display: block;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Adjust main content to account for fixed header */
+body {
+    padding-top: 70px; /* Adjust this value based on your header height */
+}

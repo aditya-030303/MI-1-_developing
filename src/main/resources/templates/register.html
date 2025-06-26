@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Satisfy&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-gradient: linear-gradient(135deg, #6366f1, #8b5cf6);
+            --secondary-gradient: linear-gradient(135deg, #4ade80, #22c55e);
+            --light-bg: #f3f4f6;
+            --dark-bg: #111827;
+            --light-text: #f9fafb;
+            --dark-text: #1f2937;
+            --light-card: rgba(255, 255, 255, 0.7);
+            --dark-card: rgba(30, 41, 59, 0.7);
+            --light-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --dark-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --border-radius: 1rem;
+            --transition: all 0.4s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: var(--transition);
+            overflow-x: hidden;
+            padding: 20px;
+            padding-top: 70px; /* Make room for fixed header */
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+            background-image: radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                             radial-gradient(circle at 0% 100%, rgba(74, 222, 128, 0.15) 0%, transparent 50%);
+        }
+
+        body.dark-mode {
+            color: var(--light-text);
+            background-color: var(--dark-bg);
+            background-image: radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                             radial-gradient(circle at 0% 100%, rgba(74, 222, 128, 0.15) 0%, transparent 50%);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 50px;
+            height: 25px;
+            border-radius: 50px;
+            background-color: var(--dark-text);
+            transition: var(--transition);
+            display: block;
+            align-items: center;
+            padding: 2px;
+        }
+
+        .theme-toggle-circle {
+            width: 21px;
+            height: 21px;
+            border-radius: 50%;
+            background-color: var(--light-bg);
+            transition: var(--transition);
+        }
+
+        body.dark-mode .theme-toggle {
+            background-color: var(--light-text);
+        }
+
+        body.dark-mode .theme-toggle-circle {
+            transform: translateX(25px);
+            background-color: var(--dark-bg);
+        }
+
+        /* Main Card */
+        .container {
+            width: 100%;
+            margin-top: 2rem;
+            max-width: 450px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background-color: var(--light-card);
+            box-shadow: var(--light-shadow);
+            transform: translateY(30px);
+            opacity: 0;
+        }
+
+        body.dark-mode .container {
+            background-color: var(--dark-card);
+            box-shadow: var(--dark-shadow);
+        }
+
+        .card-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+        
+            width: 100%;
+            height: 100%;
+            background-image: var(--primary-gradient);
+            opacity: 0.05;
+            transition: var(--transition);
+        }
+
+        .dark-mode .card-overlay {
+            opacity: 0.1;
+        }
+
+        h2 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            background: var(--primary-gradient);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-family: 'Satisfy', cursive;
+        }
+
+        /* Form Elements */
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border-radius: 0.75rem;
+            border: 2px solid transparent;
+            background-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05),
+                        -5px -5px 10px rgba(255, 255, 255, 0.6);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+            color: var(--dark-text);
+        }
+
+        .dark-mode input, .dark-mode textarea {
+            background-color: rgba(30, 41, 59, 0.8);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
+                        -5px -5px 10px rgba(255, 255, 255, 0.05);
+            color: var(--light-text);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: rgba(31, 41, 55, 0.6);
+            transition: var(--transition);
+        }
+
+        .dark-mode input::placeholder, .dark-mode textarea::placeholder {
+            color: rgba(249, 250, 251, 0.6);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            border: none;
+            background-image: var(--secondary-gradient);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1),
+                        -5px -5px 10px rgba(255, 255, 255, 0.5);
+            margin-top: 1rem;
+        }
+
+        .dark-mode button {
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2),
+                        -5px -5px 10px rgba(255, 255, 255, 0.05);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        /* Floating particles */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            opacity: 0.3;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Include header styles -->
+     <th:block th:replace="~{fragments/header :: header-styles}"></th:block>
+    </head>
+    <body>
+        <!-- Include header fragment -->
+        <div th:replace="~{fragments/header :: mainHeader}"></div>
+      </header>
+    <!-- Theme Toggle Button -->
+    <!-- <button class="theme-toggle" aria-label="Toggle dark mode">
+        <div class="theme-toggle-circle"></div>
+    </button> -->
+
+    <!-- Floating Particles Background -->
+    <div class="particles-container" id="particles-container"></div>
+
+    <div class="container">
+        <div class="card-overlay"></div>
+        <h2>Join Us</h2>
+        <form action="/customers/register" method="post">
+            <div class="form-group">
+                <label for="customerName">Full Name</label>
+                <input type="text" id="customerName" name="customerName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+              <!-- login credentials of user a riddle and it's answer -->
+            <div class="form-group">
+                <label for="bio">Your Private Riddle <span style="color: gray; font-size: 0.9rem;">(Used for login)</span></label>
+                <textarea id="bio" name="bio" rows="3" placeholder="I speak without a mouth..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Answer to Your Riddle</label>
+                <input type="text" id="password" name="password" placeholder="echo" required>
+            </div>
+            
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles-container');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random size between 10px and 40px
+                const size = Math.random() * 30 + 10;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                
+                // Random position
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                
+                // Random animation duration between 15s and 30s
+                const duration = Math.random() * 15 + 15;
+                particle.style.animationDuration = `${duration}s`;
+                
+                // Random delay
+                const delay = Math.random() * 10;
+                particle.style.animationDelay = `${delay}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Theme toggle functionality
+        function setupThemeToggle() {
+            const themeToggle = document.querySelector('.theme-toggle');
+            const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            // Set initial theme based on system preference
+            if (prefersDarkMode) {
+                document.body.classList.add('dark-mode');
+            }
+            
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+            });
+        }
+
+        // Form animations
+        function setupFormAnimations() {
+            const formGroups = document.querySelectorAll('.form-group');
+            
+            formGroups.forEach((group, index) => {
+                const input = group.querySelector('input, textarea');
+                
+                // Animate focus/blur
+                input.addEventListener('focus', () => {
+                    gsap.to(input, {
+                        scale: 1.02,
+                        duration: 0.3
+                    });
+                });
+                
+                input.addEventListener('blur', () => {
+                    gsap.to(input, {
+                        scale: 1,
+                        duration: 0.3
+                    });
+                });
+                
+                // Staggered entrance animation
+                gsap.from(group, {
+                    y: 20,
+                    opacity: 0,
+                    duration: 0.5,
+                    delay: 0.3 + (index * 0.1)
+                });
+            });
+            
+            // Button animation
+            const button = document.querySelector('button');
+            gsap.from(button, {
+                y: 20,
+                opacity: 0,
+                duration: 0.5,
+                delay: 0.8
+            });
+            
+            // Form submission animation
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function() {
+                const button = this.querySelector('button');
+                gsap.to(button, {
+                    scale: 0.95,
+                    duration: 0.1,
+                    onComplete: () => {
+                        gsap.to(button, {
+                            scale: 1,
+                            duration: 0.1
+                        });
+                    }
+                });
+            });
+        }
+
+        // Initial card animation
+        function setupInitialAnimations() {
+            gsap.to('.container', {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'back.out(1.7)'
+            });
+        }
+
+        // Initialize everything when the DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            setupThemeToggle();
+            setupFormAnimations();
+            setupInitialAnimations();
+        });
+    </script>
+</body>
+</html>

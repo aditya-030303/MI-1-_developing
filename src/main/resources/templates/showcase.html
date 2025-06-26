@@ -1,0 +1,65 @@
+<!-- showcase.html (inside /templates) -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>RiddleVerse - Showcase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/showcase.css}">
+</head>
+<body>
+    <header>
+        <!-- Include header styles -->
+     <th:block th:replace="~{fragments/header :: header-styles}"></th:block>
+    </head>
+    <body>
+        <!-- Include header fragment -->
+        <div th:replace="~{fragments/header :: mainHeader}"></div>
+      </header>
+    
+      <section>
+        <h2>🚀 What is RiddleVerse?</h2>
+        <p>A riddle-based user authentication and engagement platform. Instead of passwords, users answer riddles to log in. Once inside, they can submit, view, and solve riddles from others!</p>
+      </section>
+    
+      <section>
+        <h2>🧩 Key Features</h2>
+        <ul>
+          <li>🔐 Riddle-based login system (used every time)</li>
+          <li>👤 User profile creation after login</li>
+          <li>✍️ Add and store riddles with user attribution</li>
+          <li>🌐 Explore riddles from other users</li>
+          <li>✅ Answer riddles and receive feedback</li>
+        </ul>
+      </section>
+    
+      <section>
+        <h2>🛠️ Tech Stack</h2>
+        <div class="stack-icons">
+          <img src="https://img.icons8.com/color/48/000000/java-coffee-cup-logo.png" alt="Java" />
+          <img src="https://img.icons8.com/ios-filled/50/7f5af0/spring-logo.png" alt="Spring Boot" />
+          <img src="https://img.icons8.com/ios-filled/50/ffffff/mysql-logo.png" alt="MySQL" />
+          <img src="https://img.icons8.com/ios-filled/50/ffffff/html-5.png" alt="HTML" />
+          <img src="https://img.icons8.com/ios-filled/50/ffffff/css3.png" alt="CSS" />
+        </div>
+      </section>
+    
+      <section>
+        <h2>📖 Backstory</h2>
+        <p>Born out of the idea that login shouldn't be boring, RiddleVerse combines brain teasers with identity verification. It's a fun, creative way to interact with users — no passwords, just clever answers.</p>
+      </section>
+    
+      <section>
+        <h2>🔗 Get Started</h2>
+        <p style="margin-bottom: 1.5rem;">Once again, welcome to the RiddleVerse! Let us know — are you a returning user or just exploring?</p>
+      
+        <a href="/riddles/riddle" style="text-decoration: none;margin-top:3rem;margin-left: 20rem; padding: 10px 20px; background-color: #5b21b6; color: white; border-radius: 8px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#4a1a9c'" onmouseout="this.style.backgroundColor='#5b21b6'">🧠first Solve a Riddle to Enter</a>
+        <div class="cta-buttons" style="margin-left:7rem;display: flex; flex-direction: row; align-items: center; gap: 10px; margin-top: 20px;">
+          <a href="/customers/login" style="text-decoration: none; padding: 10px 20px; background-color: #321660; color: white; border-radius: 8px; transition: background-color 0.3s;">I'm a Regular – Take Me to Login</a>
+          <a href="/customers/register" style="text-decoration: none; padding: 10px 20px; background-color: #311065; color: white; border-radius: 8px; transition: background-color 0.3s;">I'm New – Let Me Explore</a>
+        </div>
+      </section>
+      
+      
+</body>
+</html>

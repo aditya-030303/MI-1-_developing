@@ -1,0 +1,19 @@
+body {
+    background: linear-gradient(145deg, #1e1e2f, #12131a);
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .card {
+    backdrop-filter: blur(12px);
+  }
+  
+  .table {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .btn:hover {
+    transform: scale(1.03);
+    opacity: 0.9;
+  }
+  

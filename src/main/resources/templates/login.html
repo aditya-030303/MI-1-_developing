@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - RiddleVerse</title>
+    <link rel="stylesheet" href="/css/login.css">
+    <th:block th:replace="~{fragments/header :: header-styles}"></th:block>
+</head>
+<body>
+    <div th:replace="~{fragments/header :: mainHeader}"></div>
+
+    <div class="login-container">
+        <!-- Step 1: Email input -->
+        <div th:if="${riddle == null}" class="email-step card">
+            <h2>Login!</h2>
+            <form method="POST" action="/customers/login">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email">
+                <button type="submit">Submit</button>
+            </form>
+            <p class="register-prompt">Not registered?
+                <a href="/customers/register" class="register-btn">Register</a>
+            </p>
+        </div>
+
+        <!-- Step 2: Show riddle and answer -->
+        <div th:if="${riddle != null}" class="riddle-step card">
+            <h2>Answer the Riddle</h2>
+            <p class="riddle-text"><strong>Riddle:</strong> <span th:text="${riddle}"></span></p>
+
+            <form method="POST" action="/customers/login">
+                <label for="answer">Your Answer:</label>
+                <input type="text" id="answer" name="answer" required placeholder="Enter your answer">
+                <button type="submit">Submit Answer</button>
+            </form>
+        </div>
+
+        <!-- Error message display -->
+        <div th:if="${error != null}" class="error-message">
+            <p th:text="${error}"></p>
+        </div>
+    </div>
+</body>
+</html>

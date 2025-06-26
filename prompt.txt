@@ -1,0 +1,1 @@
+provide a frontend view for a page having diferent riddles and and a space to answer them one by one by pressing next(fetching riddles from mysql ) checking the answers stored in the data base and on the basis of that giving point to the user

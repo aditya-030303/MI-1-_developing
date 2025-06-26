@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:fragment="header-styles">
+    <meta charset="UTF-8">
+    <style>
+        /* CSS styles for the header */
+        .site-header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            position: fixed; /* Makes header stick to top */
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        body{padding-top: 70px; }
+        
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .logo-text {
+            color: #f1c40f;
+        }
+        
+        .main-nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .main-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+        
+        .main-nav a:hover {
+            color: #f1c40f;
+        }
+        
+        .main-nav a.active {
+            color: #f1c40f;
+            border-bottom: 2px solid #f1c40f;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            position: relative;
+            color: white;
+        }
+        
+        .register-btn, .login-btn, .profile-btn, .logout-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        
+        .register-btn {
+            background-color: #f1c40f;
+            color: #2c3e50;
+        }
+        
+        .login-btn,
+         .profile-btn,
+          .logout-btn {
+            border: 1px solid white;
+            color: white;
+        }
+        
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 768px) {
+            .main-nav, .header-actions {
+                display: none;
+            }
+            
+            .mobile-menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Fragment with proper styling -->
+    <header th:fragment="mainHeader" class="site-header">
+        <div class="header-container">
+            <a href="/" class="logo">
+                <span class="logo-text">RiddleVerse</span>
+            </a>
+            <nav class="main-nav">
+                <ul class="nav-links">
+                    <li><a href="/" th:class="${page == 'home' ? 'active' : ''}">Home</a></li>
+                    <li><a href="/riddles/list" th:class="${page == 'riddles' ? 'active' : ''}">Riddles</a></li>
+                    <li><a href="/riddles/add" th:class="${page == 'showcase' ? 'active' : ''}">Add Riddle</a></li>
+                    <li><a href="/riddles/play" th:class="${page == 'about' ? 'active' : ''}">Play</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+              
+                <button class="theme-toggle" aria-label="Toggle dark mode">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+
+       
+               <!-- Only show when user is NOT authenticated -->
+<!-- Show when NOT logged in -->
+<div th:if="${session.customerId == null}">
+    <a href="/customers/register" class="register-btn">Register</a>
+    <a href="/customers/login" class="login-btn">Login</a>
+</div>
+
+<!-- Show when logged in -->
+<div th:if="${session.customerId != null}">
+    <a href="/customers/profile" class="profile-btn">Profile</a>
+    <a href="/customers/logout" class="logout-btn">Logout</a>
+</div>
+
+
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Simple JavaScript for theme toggle -->
+    <script th:fragment="header-scripts">
+        document.querySelector('.theme-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            // You can add localStorage persistence here
+        });
+    </script>
+</body>
+</html>
