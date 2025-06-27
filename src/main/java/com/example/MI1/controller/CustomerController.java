@@ -81,7 +81,7 @@ public class CustomerController {
             return "redirect:/customers/login";
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            System.out.println("Registration error: " + e.getMessage());
+            System.out.println("Registrationnn error: " + e.getMessage());
             model.addAttribute("errorMessage", e.getMessage());
             return "register";
         }
